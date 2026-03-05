@@ -313,10 +313,4 @@ Never commit your bot token.
 # Contributing
 
 Pull requests are welcome.
-
-You can improve:
-
-* database support
-* dashboard system
-* invite rewards
-* analytics
+You can improve the bot however you like!
