@@ -203,8 +203,6 @@ Stores:
 * leave counts
 * log channels
 
----
-
 ### `guild_invites.json`
 
 Stores cached server invite links for `/botguilds`.
@@ -227,7 +225,7 @@ This allows accurate inviter detection.
 
 # Installation
 
-## 1 Install Dependencies
+## 1. Install Dependencies
 
 ```
 npm install discord.js
@@ -235,7 +233,7 @@ npm install discord.js
 
 ---
 
-## 2 Configure Bot
+## 2. Configure Bot
 
 Edit the top of the script:
 
@@ -247,20 +245,17 @@ const BOT_OWNER_IDS = ['YOUR_USER_ID'];
 
 ---
 
-## 3 Enable Required Intents
+## 3. Enable Required Intents
 
-In the Discord Developer Portal enable:
+Enable these in the Discord Developer Portal:
 
-* View Channels
-* Send Messages
-* Embed Links
-* Read Message History
-* Manage Server
-* Create Instant Invite
+* Server Members Intent
+* Message Content Intent
+* Guild Invites Intent
 
 ---
 
-## 4 Run Bot
+## 4. Run Bot
 
 ```
 node bot.js
@@ -276,13 +271,16 @@ The bot needs:
 * Send Messages
 * Embed Links
 * Read Message History
-* Manage Guild Invites
+* Manage Server
 * Create Instant Invite
 
 ---
 
 # Project Structure
+
 ```
+inviter-bot
+│
 ├ bot.js
 ├ invitedata.json
 ├ guild_invites.json
@@ -306,31 +304,19 @@ The bot is optimized to be lightweight:
 
 Never commit your bot token.
 
-```
+---
 
+# License
 
-```
-
-# MIT License
+MIT License
 
 Copyright (c) 2026 zMachine-0
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
 
-```
-
-```
-
-
-
 ---
-
 
 # Contributing
 
