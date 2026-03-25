@@ -1,107 +1,62 @@
-# Discord Invite Tracker Bot
+# Discord invite tracker bot
 
-A lightweight **Discord invite tracking bot** built with **discord.js v14**.
-Tracks who invited members, handles rejoins and leaves, shows leaderboards, and logs invite activity.
-
-Stores all invite data locally in JSON files and works across multiple guilds.
+An discord bot which can track invites accurately, built with discord.js v14 and uses components V2.
 
 ---
 
 # Features
 
-* Accurate invite tracking using Discord invite cache comparison
-* Invite leaderboard
-* Detailed invite breakdown statistics
-* Rejoin and leave tracking
-* Vanity URL detection
-* Invite event logging
-* Admin invite management
-* Owner-only guild management panel
-* Command cooldown system
-* JSON-based persistent storage
-* Invite panel embeds
+Invite tracking, leaderboard, rejoin and leave tracking, vanity URL detection, event logging, admin invite management, owner-only guild panel, cooldown system, and a click-to-check invite panel embed.
 
 ---
 
 # Commands
 
-## User Commands
+## user commands
 
 ### `/invites`
 
-Shows invite count for a user.
-
-Optional parameter:
-
-* `user` – view another user's invites instead of your own
-
-Displays:
-
-* current invite count
-* total members joined
-* total members left
-* rejoin count
+Shows how many invites a user has. Leave the user option empty to check your own. Shows current count, how many people joined through them, how many left, and how many rejoined.
 
 ---
 
 ### `/inviter`
 
-Shows who invited a specific member.
-
-Parameter:
-
-* `member` – the member to look up
+Shows who invited a specific member, whether they've left, and if they've rejoined.
 
 ---
 
 ### `/invitebreakdown`
 
-Shows a detailed invite breakdown for a user.
-
-Includes:
-
-* total invites
-* valid invites
-* leaves
-* rejoins
-* fake invites
+A more detailed look at a user's invites — total, valid, leaves, rejoins, and fake invites.
 
 ---
 
 ### `/inviteleaderboard`
 
-Shows the **top 10 inviters** in the server.
-
-Displays for each user:
-
-* invite count
-* total joins
-* total leaves
-* rejoin count
+Shows the top 10 inviters in the server with their full stats.
 
 ---
 
 ### `/vanitycheck`
 
-Checks whether the server has a vanity invite URL and shows it if it does.
+Checks if the server has a vanity URL and shows it if it does.
 
 ---
 
 ### `/ping`
 
-Shows the bot's current WebSocket latency.
+Shows the bot's current latency.
 
 ---
 
-## Admin Commands
+## admin commands
 
-Requires **Administrator permission**.
+These require administrator permission.
 
 ### `/invitelogs`
 
-Sets a channel to log invite events in.
-
-Example:
+Sets a channel where the bot logs every invite event — joins, leaves, and rejoins.
 
 ```
 /invitelogs channel:#invite-logs
@@ -111,7 +66,7 @@ Example:
 
 ### `/resetallinvites`
 
-Wipes **all invite data** for the server. Asks for confirmation before proceeding.
+Wipes all invite data for the server. Asks for confirmation before doing anything since it can't be undone.
 
 ---
 
@@ -119,17 +74,11 @@ Wipes **all invite data** for the server. Asks for confirmation before proceedin
 
 Resets invite data for a specific user.
 
-Parameter:
-
-* `user` – the user to reset
-
 ---
 
 ### `/addinvites`
 
-Manually adds invites to a user.
-
-Example:
+Manually adds invites to a user's count.
 
 ```
 /addinvites user:@User amount:5
@@ -139,9 +88,7 @@ Example:
 
 ### `/removeinvites`
 
-Manually removes invites from a user.
-
-Example:
+Manually removes invites from a user's count.
 
 ```
 /removeinvites user:@User amount:3
@@ -151,127 +98,81 @@ Example:
 
 ### `/exportinvites`
 
-Exports all invite data for the server in CSV format.
+Exports all invite data for the server as a CSV, shown directly in Discord.
 
 ---
 
 ### `/invitespanel`
 
-Sends an invite panel embed to a channel. Members can click a button to check their own invite count.
-
-Parameter:
-
-* `channel` – the channel to send the panel to
+Sends an embed to a channel with a button members can click to check their own invite count.
 
 ---
 
-## Owner Commands
+## owner commands
 
-Restricted to user IDs listed in `BOT_OWNER_IDS`.
+Locked to whoever is listed in `BOT_OWNER_IDS` in your `.env` file.
 
 ### `/botguilds`
 
-Shows all guilds the bot is currently in.
-
-Includes:
-
-* guild name and ID
-* member count
-* invite link (auto-generated and cached)
-* pagination buttons
-* refresh button to regenerate invite links
+Shows every server the bot is in with member counts and invite links.
 
 ---
 
-# Invite Logging
+# invite logging
 
-When a log channel is set via `/invitelogs`, the bot will post an embed for every tracked event.
-
-Events logged:
-
-* member joined — shows who invited them
-* member left — shows who originally invited them
-* member rejoined — tracks rejoin count
-
-Example log:
+Once you set a log channel with `/invitelogs`, the bot posts an embed every time someone joins, leaves, or rejoins, showing who invited them. Vanity URL joins are also logged.
 
 ```
-Member Joined
-ExampleUser#0000 joined
-Invited by: @User
-```
-
-Vanity URL joins are also tracked and will show as `Vanity URL` instead of an inviter.
-
----
-
-# Data Storage
-
-All data is saved locally in two JSON files.
-
-### `invitedata.json`
-
-Stores:
-
-* invite counts per user
-* member join/leave history
-* who invited who
-* log channel settings
-
-### `guild_invites.json`
-
-Stores cached invite links used by `/botguilds`.
-
-Data is saved automatically every 5 minutes and on bot shutdown.
-
----
-
-# How Invite Tracking Works
-
-Discord doesn't tell you which invite a member used when they join. The bot works around this by:
-
-1. Caching all active invites on startup
-2. Fetching current invite usage when a member joins
-3. Comparing use counts to find which invite was just used
-
-This gives accurate inviter detection in most cases. Edge cases like simultaneous joins or deleted invites may result in an unknown inviter.
-
----
-
-# Installation
-
-## 1. Install Dependencies
-
-```
-npm install discord.js
+member joined
+ExampleUser joined
+invited by: @User
 ```
 
 ---
 
-## 2. Configure the Bot
+# how invite tracking works
 
-Open `index.js` and fill in your details at the top of the file:
+The bot works around this by caching all active invites on startup, then comparing use counts when someone joins to figure out which invite went up.
 
-```js
-const TOKEN = 'BOT_TOKEN_HERE';
-const CLIENT_ID = 'BOT_CLIENT_ID';
-const BOT_OWNER_IDS = ['YOUR_USER_ID'];
+---
+
+# data storage
+
+All data is kept in two local JSON files. `invitedata.json` stores invite counts, join/leave history, who invited who, and log channel settings. `guild_invites.json` stores cached invite links for the `/botguilds` command. Data saves automatically every 5 minutes and on clean shutdown.
+
+---
+
+# installation
+
+**1. install dependencies**
+
+```
+npm install discord.js dotenv
 ```
 
----
+**2. set up your .env file**
 
-## 3. Enable Required Intents
+Create a `.env` file in the same folder as `index.js`:
 
-In the [Discord Developer Portal](https://discord.com/developers/applications), go to your bot's settings and enable:
+```env
+TOKEN=your_bot_token_here
+CLIENT_ID=your_client_id_here
+BOT_OWNER_IDS=your_user_id_here
+```
 
-* Server Members Intent
-* Message Content Intent
+For multiple bot owners, separate IDs with commas:
 
-Guild Invites is not a privileged intent and does not need to be toggled manually.
+```env
+BOT_OWNER_IDS=123456789012345678,987654321098765432
+```
 
----
+A `.env.example` is included as a template.
 
-## 4. Run the Bot
+**3. enable intents**
+
+In the [Discord developer portal](https://discord.com/developers/applications), go to your bot and enable server members intent and message content intent. Guild invites doesn't need to be toggled.
+
+**4. run it**
 
 ```
 node index.js
@@ -279,24 +180,19 @@ node index.js
 
 ---
 
-# Required Bot Permissions
+# required permissions
 
-The bot needs the following permissions in your server:
-
-* View Channels
-* Send Messages
-* Embed Links
-* Read Message History
-* Manage Server
-* Create Instant Invite
+The bot needs view channels, send messages, embed links, read message history, manage server, and create instant invite.
 
 ---
 
-# Project Structure
+# project structure
 
 ```
 invite-tracker/
 ├── index.js
+├── .env
+├── .env.example
 ├── invitedata.json
 ├── guild_invites.json
 └── package.json
@@ -304,27 +200,18 @@ invite-tracker/
 
 ---
 
-# Notes
+# notes
 
-* The bot uses in-memory Maps for fast lookups and only writes to disk when data changes or on a 5 minute interval
-* Invite counts will never go below 0
-* The `/resetallinvites` command has a confirmation step to prevent accidental wipes
-* Never commit your bot token — use a `.env` file or environment variables if deploying
+Never commit your `.env` file — add it to `.gitignore`. The `.env.example` is safe to push since it has no real values. Invite counts can't go below 0. The `/resetallinvites` command requires confirmation so you can't accidentally wipe everything.
 
 ---
 
-# License
+# license
 
-MIT License
-
-Copyright (c) 2026 zMachine-0
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED.
+MIT license — Copyright (c) 2026 zMachine-0
 
 ---
 
-# Contributing
+# contributing
 
-Pull requests are welcome. Feel free to open an issue if you find a bug or want to suggest a feature.
+Pull requests are welcome. Open an issue if you find a bug or want to suggest something.
