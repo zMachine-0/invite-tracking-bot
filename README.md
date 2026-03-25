@@ -211,7 +211,3 @@ Never commit your `.env` file — add it to `.gitignore`. The `.env.example` is 
 MIT license — Copyright (c) 2026 zMachine-0
 
 ---
-
-# contributing
-
-Pull requests are welcome. Open an issue if you find a bug or want to suggest something.
